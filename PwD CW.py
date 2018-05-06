@@ -4,12 +4,11 @@ import numpy as np
 def main():
     print("Please enter total number of companies: ")
     companies = 5 #int(input()), total number of companies
-    markovian = False
     print("Please enter you seed company: ")
     s = 3 #int(input()), seed_company
     participation_vector = [1]*companies
     a = create_matrix_set_seed(s,companies)
-    a = compute_participation(a, companies, participation_vector)
+    a = compute_participation(a, companies, participation_vector, s)
     print(pd.DataFrame(a))
 
 def create_matrix_set_seed(s,companies):
@@ -17,7 +16,7 @@ def create_matrix_set_seed(s,companies):
     a[s][s] = 1
     return a
 
-def compute_participation(a, companies, participation_vector):
+def compute_participation(a, companies, participation_vector, s):
     pv = participation_vector[:]
     for i in range(companies):
         for j in range(companies):
@@ -31,6 +30,6 @@ def compute_participation(a, companies, participation_vector):
                     pv[j] = pv[j] - participation
     return a
 
-
+main()
 
 
