@@ -3,15 +3,15 @@ import numpy as np
 import time
 import matplotlib.pyplot as plt
 
-def main(companies):
+def main(companies,markovian):
     print("Please enter total number of companies: ")
-    companies = companies #int(input()), total number of companies
-    print("Please enter you seed company: ")
+    #companies = companies #int(input()), total number of companies
+    print("Please enter your seed company: ")
     s = 0 #int(input()), seed_company
     participation_vector = [1]*companies
     a = create_matrix_set_seed(s,companies)
     print("Markovian True or False: ")
-    markovian = True #input()
+    markovian = markovian #input()
     if markovian == False:
         a = compute_participation_non_markovian(a, companies, participation_vector, s)
     else:
@@ -91,20 +91,43 @@ def corporate_control(a,s,companies):
 
 
 def scalibility_testing():
-    k = [2]
-    n = []
-    average_time = []
-    for i in range(k):
-        for i in range(10):
-            companies = 2^k[i]
-            start_time = time.time()
-            main(companies)
-            end_time = time.time()
-            elapsed = end_time - start_time
-            total_elapsed = total_elapsed + elapsed
-        average_time.append(total_elapsed/10)
-        n.append(companies)
-    plt.plot(n, average_time, 'co', label=Scalibility_testing)
+    k = [2,4,6,8]
+    n_makovian = []
+    n_non_markovian = []
+    average_time_non_markovian = []
+    average_time_markovian = []
+    for i in range(len(k)):
+        companies = int(2**k[i])
+        for i in range(2):
+            if i == 0:
+                total_elapsed = 0
+                markovian = False
+                for i in range(10):
+                    start_time = time.time()
+                    main(companies,markovian)
+                    end_time = time.time()
+                    elapsed = end_time - start_time
+                    total_elapsed = total_elapsed + elapsed
+                average_time_non_markovian.append(total_elapsed/10)
+                n_non_markovian.append(companies)
+            if i == 1:
+                total_elapsed = 0
+                markovian = True
+                for i in range(10):
+                    start_time = time.time()
+                    main(companies,markovian)
+                    end_time = time.time()
+                    elapsed = end_time - start_time
+                    total_elapsed = total_elapsed + elapsed
+                average_time_markovian.append(total_elapsed/10)
+                n_makovian.append(companies)
+    plt.plot(n_non_markovian, average_time_non_markovian,color = 'red', label='Non-Markovian')
+    plt.plot(n_makovian, average_time_markovian, color ='blue', label='Markovian')
+    plt.xlabel("N - Companies")
+    plt.ylabel("Average Time")
+    plt.title("Scalibility Testing")
+    plt.legend()
+    plt.show()
 
 scalibility_testing()
 
