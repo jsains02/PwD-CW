@@ -1,9 +1,11 @@
 import pandas as pd
 import numpy as np
+import time
+import matplotlib.pyplot as plt
 
-def main():
+def main(companies):
     print("Please enter total number of companies: ")
-    companies = 10 #int(input()), total number of companies
+    companies = companies #int(input()), total number of companies
     print("Please enter you seed company: ")
     s = 0 #int(input()), seed_company
     participation_vector = [1]*companies
@@ -88,7 +90,22 @@ def corporate_control(a,s,companies):
     return corporate_control_list, indirect_control_list
 
 
+def scalibility_testing():
+    k = [2]
+    n = []
+    average_time = []
+    for i in range(k):
+        for i in range(10):
+            companies = 2^k[i]
+            start_time = time.time()
+            main(companies)
+            end_time = time.time()
+            elapsed = end_time - start_time
+            total_elapsed = total_elapsed + elapsed
+        average_time.append(total_elapsed/10)
+        n.append(companies)
+    plt.plot(n, average_time, 'co', label=Scalibility_testing)
 
-main()
+scalibility_testing()
 
 
